@@ -390,21 +390,25 @@ async function writeFile(path,content,sha,msg) {
 }
 
 // ─── DATA HELPERS ────────────────────────────────────────────────────────────
-async function loadUsers()   {const r=await readFile("data/users.json");    S.users=r.content;    return r;}
-async function saveUsers(c,s){await writeFile("data/users.json",c,s,"Update users");}
-async function loadEvents()  {const r=await readFile("data/events.json");   S.events=r.content;   return r;}
-async function saveEvents(c,s){await writeFile("data/events.json",c,s,"Update events");}
-async function loadWS(eid)   {if(S.ws[eid])return S.ws[eid];const r=await readFile("data/workstreams.json");S.ws._raw=r;S.ws[eid]=r.content[eid]||[];return S.ws[eid];}
-async function loadTasks(eid){if(S.tasks[eid])return S.tasks[eid];const r=await readFile("data/tasks.json");S.tasks._raw=r;S.tasks[eid]=r.content[eid]||[];return S.tasks[eid];}
-async function loadBudget(eid){if(S.budget[eid])return S.budget[eid];const r=await readFile("data/budget.json");S.budget._raw=r;S.budget[eid]=r.content[eid]||[];return S.budget[eid];}
-async function loadLogistics(eid){if(S.logistics[eid])return S.logistics[eid];const r=await readFile("data/logistics.json");S.logistics._raw=r;S.logistics[eid]=r.content[eid]||[];return S.logistics[eid];}
-async function loadSessions(eid){if(S.sessions[eid])return S.sessions[eid];const r=await readFile("data/sessions.json");S.sessions._raw=r;S.sessions[eid]=r.content[eid]||[];return S.sessions[eid];}
-async function loadLinks(eid){if(S.links[eid])return S.links[eid];const r=await readFile("data/links.json");S.links._raw=r;S.links[eid]=r.content[eid]||[];return S.links[eid];}
+async function loadUsers()   {const r=await readFile("users.json");    S.users=r.content;    return r;}
+async function saveUsers(c,s){await writeFile("users.json",c,s,"Update users");}
+async function loadEvents()  {const r=await readFile("events.json");   S.events=r.content;   return r;}
+async function saveEvents(c,s){await writeFile("events.json",c,s,"Update events");}
+
+async function saveUsers(c,s){await writeFile("users.json",c,s,"Update users");}
+async function loadEvents()  {const r=await readFile("events.json");   S.events=r.content;   return r;}
+async function saveEvents(c,s){await writeFile("events.json",c,s,"Update events");}
+async function loadWS(eid)   {if(S.ws[eid])return S.ws[eid];const r=await readFile("workstreams.json");S.ws._raw=r;S.ws[eid]=r.content[eid]||[];return S.ws[eid];}
+async function loadTasks(eid){if(S.tasks[eid])return S.tasks[eid];const r=await readFile("tasks.json");S.tasks._raw=r;S.tasks[eid]=r.content[eid]||[];return S.tasks[eid];}
+async function loadBudget(eid){if(S.budget[eid])return S.budget[eid];const r=await readFile("budget.json");S.budget._raw=r;S.budget[eid]=r.content[eid]||[];return S.budget[eid];}
+async function loadLogistics(eid){if(S.logistics[eid])return S.logistics[eid];const r=await readFile("logistics.json");S.logistics._raw=r;S.logistics[eid]=r.content[eid]||[];return S.logistics[eid];}
+async function loadSessions(eid){if(S.sessions[eid])return S.sessions[eid];const r=await readFile("sessions.json");S.sessions._raw=r;S.sessions[eid]=r.content[eid]||[];return S.sessions[eid];}
+async function loadLinks(eid){if(S.links[eid])return S.links[eid];const r=await readFile("links.json");S.links._raw=r;S.links[eid]=r.content[eid]||[];return S.links[eid];}
 
 async function saveSubData(file,key,arr,stateObj,msg) {
-  const r = await readFile("data/"+file+".json");
+  const r = await readFile(file+".json");
   const content = r.content; content[key]=arr;
-  await writeFile("data/"+file+".json",content,r.sha,msg);
+  await writeFile(file+".json",content,r.sha,msg);
   stateObj[key]=arr; if(stateObj._raw)stateObj._raw=null;
 }
 const saveWS=(eid,arr)=>saveSubData("workstreams",eid,arr,S.ws,"Update workstreams");
@@ -1278,7 +1282,7 @@ async function addParticipant() {
   const pw=document.getElementById("regPw").value;
   if(!name||!username||!pw){toast("Fill in all three fields","error");return;}
   try {
-    const r=await readFile("data/users.json");
+    const r=await readFile("users.json");
     const users=r.content;
     if(users[username]){toast("Username already exists","error");return;}
     const pwHash=await hashPassword(pw,"participant");
@@ -1295,7 +1299,7 @@ async function addParticipant() {
 async function removeParticipant(username) {
   if(!confirm(`Remove ${username}?`))return;
   try {
-    const r=await readFile("data/users.json");
+    const r=await readFile("users.json");
     delete r.content[username];
     await saveUsers(r.content,r.sha);
     toast("Removed");renderSettings();
