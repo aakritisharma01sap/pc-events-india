@@ -642,7 +642,7 @@ async function renderPMDashboard() {
           </div>
         </div>`;
       }).join("")}</div>`;
-  } catch(e){el.innerHTML=`<div class="empty"><p style="color:#e53e3e">Error loading events: ${esc(e.message)}</p></div>`;}
+  } catch(e){el.innerHTML=`<div class="empty"><p style="color:#e53e3e">Error: ${esc(e.message||"(no message)")} | HTTP status: ${e.status||"network error"}</p></div>`;}
 }
 
 // ─── PM: EVENT FORM ───────────────────────────────────────────────────────────
